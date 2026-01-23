@@ -6,7 +6,7 @@ body {
 }
 
 .container {
-    max-width: 900px;
+    max-width: 100%;
     margin: auto;
     padding: 20px;
 }
@@ -14,8 +14,9 @@ body {
 h1 {
     text-align: center;
     color: #00ff7f;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
     text-shadow: 0 0 10px rgba(0, 255, 127, 0.3);
+    font-size: 24px;
 }
 
 /* Индикатор недели */
@@ -24,41 +25,48 @@ h1 {
     padding: 15px;
     border-radius: 10px;
     margin-bottom: 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     border: 1px solid #333;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
 }
 
 .week-toggle {
     display: flex;
     align-items: center;
     gap: 15px;
+    flex-wrap: wrap;
 }
 
 .week-btn {
-    padding: 10px 20px;
+    padding: 12px 20px;
     background: linear-gradient(135deg, #00ff7f, #00cc66);
     border: none;
-    border-radius: 6px;
+    border-radius: 8px;
     color: #000;
     font-weight: bold;
     cursor: pointer;
     transition: transform 0.2s, box-shadow 0.2s;
+    flex: 1;
+    min-width: 200px;
+    font-size: 16px;
 }
 
-.week-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0, 255, 127, 0.4);
+.week-btn:active {
+    transform: scale(0.98);
+    box-shadow: 0 2px 10px rgba(0, 255, 127, 0.4);
 }
 
 .current-week {
     font-size: 18px;
     font-weight: bold;
-    padding: 8px 16px;
-    border-radius: 6px;
+    padding: 12px 20px;
+    border-radius: 8px;
     background: #2a2a2a;
     border: 2px solid #00ff7f;
+    text-align: center;
+    flex: 1;
+    min-width: 200px;
 }
 
 /* Выбор подгруппы */
@@ -66,20 +74,25 @@ h1 {
     display: flex;
     align-items: center;
     gap: 10px;
+    flex-wrap: wrap;
 }
 
 .subgroup-label {
     color: #bbb;
-    font-size: 14px;
+    font-size: 16px;
+    font-weight: 500;
 }
 
 #subgroupSelect {
-    padding: 8px 12px;
+    padding: 12px 16px;
     background: #2a2a2a;
-    border: 1px solid #444;
+    border: 2px solid #444;
     color: white;
-    border-radius: 6px;
+    border-radius: 8px;
     cursor: pointer;
+    font-size: 16px;
+    flex: 1;
+    min-width: 200px;
 }
 
 #subgroupSelect:focus {
@@ -97,22 +110,20 @@ h1 {
 
 .day-nav button {
     flex: 1;
-    min-width: 80px;
-    padding: 12px;
+    min-width: calc(33.333% - 8px);
+    padding: 14px;
     background: #1e1e1e;
     border: 2px solid #333;
     color: white;
-    border-radius: 8px;
+    border-radius: 10px;
     cursor: pointer;
     font-weight: bold;
     font-size: 16px;
     transition: all 0.3s;
 }
 
-.day-nav button:hover {
-    background: #2a2a2a;
-    border-color: #00ff7f;
-    transform: translateY(-2px);
+.day-nav button:active {
+    transform: scale(0.97);
 }
 
 .day-nav button.active {
@@ -123,49 +134,52 @@ h1 {
 }
 
 /* Блоки с расписанием */
-.week-section {
-    margin-bottom: 35px;
-    animation: fadeIn 0.5s ease;
-}
-
-.week-section h2 {
-    color: #00ff7f;
+.day-header {
+    margin-bottom: 20px;
     padding-bottom: 10px;
-    margin-bottom: 15px;
     border-bottom: 2px solid #333;
-    display: flex;
-    align-items: center;
-    gap: 10px;
 }
 
-.week-section h2::before {
-    content: "📅";
-    font-size: 20px;
+.day-header h2 {
+    color: #fff;
+    margin: 0 0 5px 0;
+    font-size: 22px;
+}
+
+.week-indicator-small {
+    color: #00ff7f;
+    font-size: 14px;
+    font-weight: bold;
 }
 
 .lesson {
     display: flex;
     background: linear-gradient(135deg, #151515, #1a1a1a);
     border: 2px solid #333;
-    border-radius: 10px;
+    border-radius: 12px;
     margin-bottom: 15px;
     overflow: hidden;
     transition: transform 0.3s, border-color 0.3s;
 }
 
-.lesson:hover {
-    transform: translateX(5px);
-    border-color: #00ff7f;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+.lesson:active {
+    transform: scale(0.99);
 }
 
 .bar {
     width: 8px;
+}
+
+.bar.upper-week {
     background: linear-gradient(to bottom, #00ff7f, #00cc66);
 }
 
+.bar.lower-week {
+    background: linear-gradient(to bottom, #ff6b6b, #ff4757);
+}
+
 .lesson-content {
-    padding: 15px;
+    padding: 16px;
     flex: 1;
 }
 
@@ -173,32 +187,33 @@ h1 {
     font-size: 18px;
     font-weight: bold;
     color: #00ff7f;
-    margin-bottom: 5px;
+    margin-bottom: 8px;
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     gap: 10px;
 }
 
 .title {
-    font-size: 20px;
+    font-size: 18px;
     font-weight: bold;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
     color: #fff;
+    line-height: 1.4;
 }
 
 .info {
     color: #bbb;
     font-size: 14px;
     display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    align-items: center;
+    flex-direction: column;
+    gap: 6px;
 }
 
 /* Бейджи для подгрупп */
 .subgroup-badge {
     display: inline-block;
-    padding: 3px 10px;
+    padding: 4px 12px;
     background: #2a2a2a;
     border-radius: 12px;
     font-size: 12px;
@@ -209,13 +224,30 @@ h1 {
 
 .week-badge {
     display: inline-block;
-    padding: 3px 10px;
-    background: #ff6b6b;
+    padding: 4px 12px;
     border-radius: 12px;
     font-size: 12px;
     font-weight: bold;
     color: white;
-    margin-left: 10px;
+}
+
+.upper-week .week-badge {
+    background: #00cc66;
+}
+
+.lower-week .week-badge {
+    background: #ff6b6b;
+}
+
+/* Нет занятий */
+.no-lessons {
+    text-align: center;
+    padding: 40px 20px;
+    color: #666;
+    font-size: 18px;
+    background: #1a1a1a;
+    border-radius: 12px;
+    border: 2px dashed #333;
 }
 
 /* Анимации */
@@ -230,27 +262,44 @@ h1 {
     }
 }
 
-/* Адаптивность */
-@media (max-width: 768px) {
+.lesson {
+    animation: fadeIn 0.3s ease-out;
+}
+
+/* Адаптивность для мобильных */
+@media (max-width: 480px) {
+    .container {
+        padding: 15px;
+    }
+    
+    h1 {
+        font-size: 20px;
+        margin-bottom: 15px;
+    }
+    
     .week-indicator {
-        flex-direction: column;
-        gap: 15px;
-        align-items: stretch;
-    }
-    
-    .day-nav button {
-        min-width: calc(33.333% - 8px);
-    }
-    
-    .lesson-content {
         padding: 12px;
     }
     
-    .title {
-        font-size: 18px;
+    .week-btn, .current-week, #subgroupSelect {
+        min-width: 100%;
+    }
+    
+    .day-nav button {
+        min-width: calc(50% - 8px);
+        padding: 12px;
+        font-size: 15px;
+    }
+    
+    .lesson-content {
+        padding: 14px;
     }
     
     .time {
+        font-size: 16px;
+    }
+    
+    .title {
         font-size: 16px;
     }
 }
