@@ -1,0 +1,74 @@
+body {
+    margin: 0;
+    background: #0f0f0f;
+    color: #fff;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    max-width: 800px;
+    margin: auto;
+    padding: 16px;
+}
+
+h1 {
+    text-align: center;
+}
+
+.day-nav {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 16px;
+}
+
+.day-nav button {
+    flex: 1;
+    padding: 10px;
+    background: #1e1e1e;
+    border: 1px solid #444;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.day-nav button:hover {
+    background: #2a2a2a;
+}
+
+.week {
+    margin-bottom: 24px;
+}
+
+.week h2 {
+    color: #aaa;
+}
+
+.lesson {
+    display: flex;
+    background: #151515;
+    border: 2px solid #555;
+    border-radius: 8px;
+    margin-bottom: 12px;
+}
+
+.bar {
+    width: 6px;
+    background: #00ff7f;
+}
+
+.lesson-content {
+    padding: 12px;
+}
+
+.time {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.title {
+    font-size: 22px;
+}
+
+.info {
+    color: #bbb;
+}
