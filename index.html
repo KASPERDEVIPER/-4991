@@ -2,121 +2,42 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Расписание 📚</title>
+    <title>Расписание</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="script.js" defer></script>
 </head>
 <body>
 
-<!-- Мобильное меню -->
-<div class="mobile-header">
-    <button class="menu-toggle" id="menuToggle">
-        <i class="fas fa-bars"></i>
-    </button>
-    <h1>Расписание</h1>
-    <button class="today-btn" id="todayBtn">
-        <i class="fas fa-calendar-day"></i>
-    </button>
-</div>
-
-<!-- Боковое меню для мобильных -->
-<div class="mobile-menu" id="mobileMenu">
-    <div class="menu-header">
-        <h3>Настройки</h3>
-        <button class="close-menu" id="closeMenu">
-            <i class="fas fa-times"></i>
-        </button>
-    </div>
-    
-    <div class="menu-section">
-        <h4><i class="fas fa-users"></i> Подгруппа</h4>
-        <div class="subgroup-selector">
-            <button class="subgroup-btn active" data-subgroup="all">Все</button>
-            <button class="subgroup-btn" data-subgroup="1">1-я</button>
-            <button class="subgroup-btn" data-subgroup="2">2-я</button>
-        </div>
-    </div>
-    
-    <div class="menu-section">
-        <h4><i class="fas fa-calendar-alt"></i> Неделя</h4>
-        <div class="week-selector">
-            <button class="week-btn active" data-week="верх">Верхняя</button>
-            <button class="week-btn" data-week="низ">Нижняя</button>
-        </div>
-    </div>
-    
-    <div class="menu-section">
-        <h4><i class="fas fa-clock"></i> Быстрые дни</h4>
-        <div class="quick-days">
-            <button class="quick-day" data-day="pn"><span>Пн</span></button>
-            <button class="quick-day" data-day="vt"><span>Вт</span></button>
-            <button class="quick-day" data-day="sr"><span>Ср</span></button>
-            <button class="quick-day" data-day="cht"><span>Чт</span></button>
-            <button class="quick-day" data-day="pt"><span>Пт</span></button>
-            <button class="quick-day" data-day="sb"><span>Сб</span></button>
-        </div>
-    </div>
-</div>
-
 <div class="container">
-    <!-- Верхняя панель с текущим днём и неделей -->
-    <div class="top-bar">
-        <div class="current-day" id="currentDay">
-            <i class="fas fa-calendar"></i>
-            <span>Понедельник</span>
+    <h1>Расписание занятий</h1>
+    
+    <!-- Индикатор текущей недели -->
+    <div class="week-indicator">
+        <div class="week-toggle">
+            <button id="toggleWeek" class="week-btn">Переключить неделю</button>
+            <div id="currentWeek" class="current-week">Верхняя неделя</div>
         </div>
-        <div class="current-week-badge" id="currentWeekBadge">
-            <i class="fas fa-layer-group"></i>
-            <span>Верхняя неделя</span>
+        <div class="subgroup-info">
+            <span class="subgroup-label">Ваша подгруппа:</span>
+            <select id="subgroupSelect">
+                <option value="all">Все подгруппы</option>
+                <option value="1">Подгруппа 1</option>
+                <option value="2">Подгруппа 2</option>
+            </select>
         </div>
     </div>
-    
-    <!-- Swipe-контейнер для дней -->
-    <div class="days-swipe-container">
-        <div class="days-container" id="daysContainer">
-            <!-- Дни будут добавлены через JS -->
-        </div>
-        <div class="swipe-indicator">
-            <span class="swipe-hint"><i class="fas fa-arrows-left-right"></i> Листайте дни</span>
-        </div>
-    </div>
-    
-    <!-- Контент расписания -->
-    <div class="schedule-container">
-        <div id="schedule">
-            <!-- Сюда загрузится расписание -->
-        </div>
-        
-        <!-- Индикатор подгруппы -->
-        <div class="subgroup-indicator" id="subgroupIndicator">
-            <i class="fas fa-user-friends"></i>
-            <span>Показываются занятия для всех подгрупп</span>
-            <button class="change-subgroup" id="changeSubgroupBtn">
-                <i class="fas fa-pencil-alt"></i>
-            </button>
-        </div>
-    </div>
-    
-    <!-- Плавающая кнопка для смены недели -->
-    <button class="floating-btn" id="floatingWeekBtn">
-        <i class="fas fa-sync-alt"></i>
-        <span>Сменить неделю</span>
-    </button>
-    
-    <!-- Индикатор текущего времени -->
-    <div class="time-indicator" id="timeIndicator">
-        <i class="fas fa-clock"></i>
-        <span id="currentTime">00:00</span>
-        <div class="next-lesson" id="nextLesson">
-            Следующее: через 10 мин
-        </div>
-    </div>
-</div>
 
-<!-- Оверлей для меню -->
-<div class="menu-overlay" id="menuOverlay"></div>
+    <nav class="day-nav">
+        <button data-day="pn">Пн</button>
+        <button data-day="vt">Вт</button>
+        <button data-day="sr">Ср</button>
+        <button data-day="cht">Чт</button>
+        <button data-day="pt">Пт</button>
+        <button data-day="sb">Сб</button>
+    </nav>
+
+    <div id="schedule"></div>
+</div>
 
 </body>
 </html>
