@@ -2,538 +2,177 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Расписание группы</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: Arial, sans-serif;
-            background: #0a1929;
-            color: white;
-            padding: 20px;
-            padding-top: 70px;
-            padding-bottom: 100px;
-        }
-        
-        .header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            background: #1c2b3a;
-            padding: 15px;
-            border-bottom: 2px solid #2c3e50;
-            z-index: 1000;
-        }
-        
-        .header h1 {
-            text-align: center;
-            color: #3498db;
-            font-size: 1.5rem;
-        }
-        
-        .controls {
-            display: flex;
-            gap: 10px;
-            margin: 20px 0;
-            flex-wrap: wrap;
-        }
-        
-        .week-control {
-            flex: 1;
-            min-width: 300px;
-            background: #1c2b3a;
-            padding: 15px;
-            border-radius: 10px;
-            border: 2px solid #2c3e50;
-        }
-        
-        .week-btn {
-            width: 100%;
-            padding: 12px;
-            background: #3498db;
-            border: none;
-            border-radius: 8px;
-            color: white;
-            font-weight: bold;
-            font-size: 1rem;
-            margin-bottom: 15px;
-            cursor: pointer;
-        }
-        
-        .week-info {
-            display: flex;
-            gap: 10px;
-            text-align: center;
-        }
-        
-        .current-week, .next-week {
-            flex: 1;
-            padding: 10px;
-            border-radius: 8px;
-        }
-        
-        .current-week {
-            background: #2c3e50;
-            border: 2px solid #3498db;
-        }
-        
-        .next-week {
-            background: #2c3e50;
-            border: 2px solid #7f8c8d;
-        }
-        
-        .week-label {
-            font-size: 0.8rem;
-            color: #95a5a6;
-            margin-bottom: 5px;
-        }
-        
-        .week-name {
-            font-weight: bold;
-            font-size: 1.1rem;
-        }
-        
-        .subgroup-select {
-            flex: 1;
-            min-width: 200px;
-            padding: 12px;
-            background: #2c3e50;
-            border: 2px solid #3498db;
-            border-radius: 8px;
-            color: white;
-            font-size: 1rem;
-        }
-        
-        .days {
-            display: flex;
-            gap: 8px;
-            margin: 20px 0;
-            overflow-x: auto;
-            padding: 10px 0;
-        }
-        
-        .day-btn {
-            min-width: 80px;
-            padding: 15px 10px;
-            background: #2c3e50;
-            border: 2px solid #34495e;
-            border-radius: 10px;
-            color: white;
-            font-weight: bold;
-            font-size: 1rem;
-            text-align: center;
-            cursor: pointer;
-            flex-shrink: 0;
-        }
-        
-        .day-btn.active {
-            background: #3498db;
-            border-color: #3498db;
-        }
-        
-        .schedule {
-            min-height: 300px;
-        }
-        
-        .lesson {
-            background: #1c2b3a;
-            border-left: 5px solid #3498db;
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 15px;
-            border: 1px solid #2c3e50;
-        }
-        
-        .lesson.lower {
-            border-left-color: #e74c3c;
-        }
-        
-        .time {
-            color: #3498db;
-            font-size: 1.2rem;
-            font-weight: bold;
-            margin-bottom: 8px;
-        }
-        
-        .title {
-            font-size: 1.1rem;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-        
-        .info {
-            color: #95a5a6;
-            font-size: 0.9rem;
-            margin-bottom: 5px;
-        }
-        
-        .badge {
-            display: inline-block;
-            padding: 4px 10px;
-            background: rgba(52, 152, 219, 0.2);
-            border: 1px solid #3498db;
-            border-radius: 15px;
-            font-size: 0.8rem;
-            margin-top: 10px;
-        }
-        
-        .no-lessons {
-            text-align: center;
-            padding: 40px;
-            color: #7f8c8d;
-            font-size: 1.1rem;
-            background: #1c2b3a;
-            border-radius: 10px;
-            border: 2px dashed #2c3e50;
-        }
-        
-        .time-indicator {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            right: 20px;
-            background: #1c2b3a;
-            border: 2px solid #2c3e50;
-            border-radius: 10px;
-            padding: 15px;
-            display: flex;
-            justify-content: space-between;
-        }
-        
-        .current-time {
-            font-size: 1.3rem;
-            font-weight: bold;
-            color: #3498db;
-        }
-        
-        .next-lesson {
-            color: #95a5a6;
-            font-size: 0.9rem;
-        }
-        
-        @media (max-width: 600px) {
-            .week-control, .subgroup-select {
-                min-width: 100%;
-            }
-            
-            .day-btn {
-                min-width: 70px;
-                padding: 12px 8px;
-            }
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>📚 Расписание группы</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="script.js" defer></script>
 </head>
 <body>
-    <div class="header">
-        <h1>📚 Расписание группы</h1>
+
+<!-- Мобильный хедер -->
+<header class="mobile-header">
+    <div class="header-content">
+        <h1><i class="fas fa-calendar-alt"></i> Расписание</h1>
+        <button class="menu-toggle" id="menuToggle">
+            <i class="fas fa-cog"></i>
+        </button>
+    </div>
+</header>
+
+<!-- Боковое меню для настроек -->
+<nav class="mobile-menu" id="mobileMenu">
+    <div class="menu-header">
+        <h3><i class="fas fa-sliders-h"></i> Настройки</h3>
+        <button class="close-menu" id="closeMenu">
+            <i class="fas fa-times"></i>
+        </button>
     </div>
     
-    <div class="controls">
-        <div class="week-control">
-            <button class="week-btn" id="toggleWeek">🔄 Переключить неделю</button>
-            <div class="week-info">
-                <div class="current-week">
-                    <div class="week-label">Сейчас:</div>
-                    <div class="week-name" id="currentWeek">Верхняя неделя</div>
-                </div>
-                <div class="next-week">
-                    <div class="week-label">Следующая:</div>
-                    <div class="week-name" id="nextWeek">Нижняя неделя</div>
-                </div>
+    <div class="menu-content">
+        <div class="menu-section">
+            <h4><i class="fas fa-users"></i> Моя подгруппа</h4>
+            <div class="subgroup-selector">
+                <button class="sub-btn ${selectedSubgroup === 'all' ? 'active' : ''}" data-subgroup="all">
+                    <i class="fas fa-users"></i> Все
+                </button>
+                <button class="sub-btn ${selectedSubgroup === '1' ? 'active' : ''}" data-subgroup="1">
+                    <i class="fas fa-user"></i> 1-я
+                </button>
+                <button class="sub-btn ${selectedSubgroup === '2' ? 'active' : ''}" data-subgroup="2">
+                    <i class="fas fa-user"></i> 2-я
+                </button>
             </div>
         </div>
         
-        <select class="subgroup-select" id="subgroupSelect">
-            <option value="all">Все подгруппы</option>
-            <option value="1">Подгруппа 1</option>
-            <option value="2">Подгруппа 2</option>
-        </select>
+        <div class="menu-section">
+            <h4><i class="fas fa-calendar-week"></i> Автопереключение</h4>
+            <div class="toggle-switch">
+                <span>Автовыбор дня</span>
+                <label class="switch">
+                    <input type="checkbox" id="autoDayToggle" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <div class="toggle-switch">
+                <span>Автовыбор недели</span>
+                <label class="switch">
+                    <input type="checkbox" id="autoWeekToggle" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+        
+        <div class="menu-section">
+            <h4><i class="fas fa-info-circle"></i> Информация</h4>
+            <div class="info-box">
+                <p><i class="fas fa-code"></i> Разработчик: Группа ПР-31</p>
+                <p><i class="fas fa-sync-alt"></i> Данные обновляются автоматически</p>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- Оверлей для меню -->
+<div class="menu-overlay" id="menuOverlay"></div>
+
+<main class="container">
+    <!-- Текущая дата и день -->
+    <div class="date-info">
+        <div class="current-date" id="currentDate">
+            <i class="fas fa-calendar-day"></i>
+            <span>Понедельник, 12 ноября</span>
+        </div>
+        <div class="today-btn" id="todayBtn">
+            <i class="fas fa-home"></i>
+            Сегодня
+        </div>
     </div>
     
-    <div class="days">
-        <button class="day-btn active" data-day="pn">Пн</button>
-        <button class="day-btn" data-day="vt">Вт</button>
-        <button class="day-btn" data-day="sr">Ср</button>
-        <button class="day-btn" data-day="cht">Чт</button>
-        <button class="day-btn" data-day="pt">Пт</button>
-        <button class="day-btn" data-day="sb">Сб</button>
+    <!-- Индикатор недель -->
+    <div class="week-info-mobile">
+        <div class="current-week-mobile">
+            <div class="week-label-mobile">
+                <i class="fas fa-play-circle"></i>
+                <span>Текущая неделя</span>
+            </div>
+            <div class="week-name-mobile" id="currentWeekMobile">Верхняя</div>
+        </div>
+        
+        <button class="week-toggle-mobile" id="toggleWeekMobile">
+            <i class="fas fa-exchange-alt"></i>
+            Сменить
+        </button>
+        
+        <div class="next-week-mobile">
+            <div class="week-label-mobile">
+                <i class="fas fa-forward"></i>
+                <span>Следующая</span>
+            </div>
+            <div class="week-name-mobile" id="nextWeekMobile">Нижняя</div>
+        </div>
     </div>
     
-    <div class="schedule" id="schedule">
-        <!-- Расписание загрузится здесь -->
+    <!-- Навигация по дням (горизонтальный скролл) -->
+    <div class="days-scroll-container">
+        <div class="days-scroll" id="daysScroll">
+            <!-- Дни будут добавлены через JS -->
+        </div>
+        <div class="scroll-hint">
+            <i class="fas fa-arrows-left-right"></i> Листайте
+        </div>
     </div>
     
-    <div class="time-indicator">
-        <div class="current-time" id="currentTime">00:00</div>
-        <div class="next-lesson" id="nextLesson">Следующая пара: загрузка...</div>
+    <!-- Подгруппа и фильтры -->
+    <div class="filter-bar">
+        <div class="active-subgroup" id="activeSubgroup">
+            <i class="fas fa-user-friends"></i>
+            <span>Показываются все подгруппы</span>
+        </div>
+        <button class="filter-btn" id="filterBtn">
+            <i class="fas fa-filter"></i>
+            Фильтр
+        </button>
     </div>
+    
+    <!-- Основное расписание -->
+    <div class="schedule-container">
+        <div id="schedule" class="schedule-content">
+            <!-- Расписание будет загружено здесь -->
+        </div>
+        
+        <!-- Индикатор загрузки -->
+        <div class="loading-indicator" id="loadingIndicator">
+            <div class="spinner"></div>
+            <p>Загрузка расписания...</p>
+        </div>
+    </div>
+    
+    <!-- Индикатор текущего времени -->
+    <div class="time-indicator" id="timeIndicator">
+        <div class="current-time">
+            <i class="fas fa-clock"></i>
+            <span id="currentTime">00:00</span>
+        </div>
+        <div class="next-lesson-info" id="nextLessonInfo">
+            <i class="fas fa-arrow-right"></i>
+            <span>Следующая пара: через 30 мин</span>
+        </div>
+    </div>
+    
+    <!-- Плавающая кнопка для быстрого перехода -->
+    <button class="floating-action-btn" id="floatingActionBtn">
+        <i class="fas fa-bolt"></i>
+    </button>
+</main>
 
-    <script>
-        // Данные расписания
-        const schedule = {
-          pn: {
-            верх: [
-              ["8:30–10:10", "Основы проектирования баз данных", "ауд. 123", "Бурбах Владимир Витальевич", [1, 2]],
-              ["10:20–12:00", "Основы проектирования баз данных", "ауд. 123", "Бурбах Владимир Витальевич", [1, 2]],
-              ["12:45–14:25", "Математическое моделирование", "ауд. 222", "Шаркова Мария Александровна", [1, 2]]
-            ],
-            низ: [
-              ["8:30–10:10", "Архитектура аппаратных средств", "ауд. 226", "Андреев Игорь Алексеевич", [1, 2]],
-              ["10:20–12:00", "Основы проектирования баз данных", "ауд. 123", "Бурбах Владимир Витальевич", [1, 2]],
-              ["12:45–14:25", "Математическое моделирование", "ауд. 222", "Шаркова Мария Александровна", [1, 2]]
-            ]
-          },
+<!-- Уведомления -->
+<div class="notification" id="notification">
+    <div class="notification-content">
+        <i class="fas fa-bell"></i>
+        <span id="notificationText"></span>
+    </div>
+</div>
 
-          vt: {
-            верх: [
-              ["10:20–12:00", "Английский язык", "ауд. 321", "Кручинина Ольга Анатольевна", [1]],
-              ["12:45–14:25", "Разработка программных модулей", "ауд. 120", "Сазонова Н.В.", [1]],
-              ["12:45–14:25", "Английский язык", "ауд. 321", "Кручинина Ольга Анатольевна", [2]]
-            ],
-            низ: [
-              ["10:20–12:00", "Английский язык", "ауд. 321", "Кручинина Ольга Анатольевна", [1]],
-              ["12:45–14:25", "Разработка программных модулей", "ауд. 120", "Сазонова Н.В.", [1]],
-              ["12:45–14:25", "Английский язык", "ауд. 321", "Кручинина Ольга Анатольевна", [2]],
-              ["14:35–16:15", "Разработка программных модулей", "ауд. 120", "Сазонова Н.В.", [1, 2]]
-            ]
-          },
-
-          sr: {
-            верх: [
-              ["10:20–12:00", "Теория вероятностей и статистика", "ауд. 222", "Шаркова Мария Александровна", [1, 2]],
-              ["12:45–14:25", "Основы алгоритмизации и программирования", "ауд. 124", "Егорова Ольга Викторовна", [1, 2]],
-              ["14:35–16:15", "Архитектура аппаратных средств", "ауд. 226", "Андреев Игорь Алексеевич", [1, 2]],
-              ["16:35–18:05", "Основы проектирования баз данных", "ауд. 123", "Бурбах Владимир Витальевич", [1, 2]]
-            ],
-            низ: [
-              ["8:30–10:10", "Математическое моделирование", "ауд. 222", "Шаркова Мария Александровна", [1, 2]],
-              ["10:20–12:00", "Теория вероятностей и статистика", "ауд. 222", "Шаркова Мария Александровна", [1, 2]],
-              ["14:35–16:15", "Основы проектирования баз данных", "ауд. 123", "Бурбах Владимир Витальевич", [1, 2]]
-            ]
-          },
-
-          cht: {
-            верх: [
-              ["8:30–10:10", "Основы алгоритмизации и программирования", "ауд. 124", "Егорова Ольга Викторовна", [2]],
-              ["10:20–12:00", "Теории разработки ПО", "ауд. 124", "Егорова Ольга Викторовна", [1, 2]],
-              ["12:45–14:25", "Теории разработки ПО", "ауд. 124", "Егорова Ольга Викторовна", [1, 2]],
-              ["14:35–16:15", "Основы алгоритмизации и программирования", "ауд. 124", "Егорова Ольга Викторовна", [1]]
-            ],
-            низ: [
-              ["8:30–10:10", "Основы алгоритмизации и программирования", "ауд. 124", "Егорова Ольга Викторовна", [2]],
-              ["10:20–12:00", "Теории разработки ПО", "ауд. 124", "Егорова Ольга Викторовна", [1, 2]],
-              ["12:45–14:25", "Теории разработки ПО", "ауд. 124", "Егорова Ольга Викторовна", [1, 2]],
-              ["14:35–16:15", "Основы алгоритмизации и программирования", "ауд. 124", "Егорова Ольга Викторовна", [2]]
-            ]
-          },
-
-          pt: {
-            верх: [
-              ["8:30–10:10", "Высшая математика", "ауд. 410", "Ширина Тамара Сергеевна", [1, 2]],
-              ["10:20–12:00", "Основы алгоритмизации и программирования", "ауд. 124", "Егорова Ольга Викторовна", [1]],
-              ["10:20–12:00", "Разработка программных модулей", "ауд. 120", "Сазонова Н.В.", [2]],
-              ["12:45–14:25", "Физическая культура", "спортзал", "Иванов Николай Николаевич", [1, 2]],
-              ["14:35–16:15", "Теория вероятностей и статистика", "ауд. 222", "Шаркова Мария Александровна", [1, 2]]
-            ],
-            низ: [
-              ["8:30–10:10", "Высшая математика", "ауд. 410", "Ширина Тамара Сергеевна", [1, 2]],
-              ["10:20–12:00", "Основы алгоритмизации и программирования", "ауд. 124", "Егорова Ольга Викторовна", [1]],
-              ["10:20–12:00", "Разработка программных модулей", "ауд. 120", "Сазонова Н.В.", [2]],
-              ["12:45–14:25", "Физическая культура", "спортзал", "Иванов Николай Николаевич", [1, 2]],
-              ["14:35–16:15", "Теория вероятностей и статистика", "ауд. 222", "Шаркова Мария Александровна", [1, 2]]
-            ]
-          },
-
-          sb: {
-            верх: [
-              ["8:30–9:30", "Разработка веб-приложений", "ауд. 226", "Афанасаева Инга Артуровна", [1, 2]],
-              ["9:40–10:40", "Разработка веб-приложений", "ауд. 226", "Афанасаева Инга Артуровна", [1, 2]]
-            ],
-            низ: [
-              ["9:40–10:40", "Разработка веб-приложений", "ауд. 226", "Афанасаева Инга Артуровна", [1, 2]]
-            ]
-          }
-        };
-
-        // Состояние
-        let currentDay = "pn";
-        let currentWeek = "верх";
-        let selectedSubgroup = "all";
-
-        // Функция отображения дня
-        function renderDay(day) {
-            currentDay = day;
-            
-            // Обновляем активную кнопку дня
-            document.querySelectorAll('.day-btn').forEach(btn => {
-                btn.classList.toggle('active', btn.dataset.day === day);
-            });
-            
-            // Получаем данные для дня и недели
-            const dayData = schedule[day];
-            const lessons = dayData ? dayData[currentWeek] || [] : [];
-            
-            const scheduleDiv = document.getElementById('schedule');
-            
-            if (lessons.length === 0) {
-                scheduleDiv.innerHTML = `
-                    <div class="no-lessons">
-                        <p>📅 На этой неделе нет занятий</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            // Фильтруем по подгруппе
-            const filteredLessons = lessons.filter(lesson => {
-                if (selectedSubgroup === "all") return true;
-                return lesson[4].includes(parseInt(selectedSubgroup));
-            });
-            
-            if (filteredLessons.length === 0) {
-                scheduleDiv.innerHTML = `
-                    <div class="no-lessons">
-                        <p>👥 Нет занятий для выбранной подгруппы</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            // Сортируем по времени
-            filteredLessons.sort((a, b) => {
-                const timeA = a[0].split('–')[0].replace(':', '');
-                const timeB = b[0].split('–')[0].replace(':', '');
-                return parseInt(timeA) - parseInt(timeB);
-            });
-            
-            // Рендерим занятия
-            scheduleDiv.innerHTML = filteredLessons.map(lesson => {
-                const [time, title, place, teacher, subgroups] = lesson;
-                const weekClass = currentWeek === 'низ' ? 'lower' : '';
-                const weekBadge = currentWeek === 'верх' ? 'Верхняя неделя' : 'Нижняя неделя';
-                const subgroupText = subgroups.length === 2 ? 'Все подгруппы' : `Подгруппа ${subgroups[0]}`;
-                
-                return `
-                    <div class="lesson ${weekClass}">
-                        <div class="time">${time} <span class="badge">${weekBadge}</span></div>
-                        <div class="title">${title}</div>
-                        ${place ? `<div class="info">📍 ${place}</div>` : ''}
-                        ${teacher ? `<div class="info">👨‍🏫 ${teacher}</div>` : ''}
-                        <div class="badge">${subgroupText}</div>
-                    </div>
-                `;
-            }).join('');
-            
-            updateNextLessonInfo();
-        }
-
-        // Обновление информации о следующей паре
-        function updateNextLessonInfo() {
-            const now = new Date();
-            const currentMinutes = now.getHours() * 60 + now.getMinutes();
-            
-            const dayData = schedule[currentDay];
-            if (!dayData || !dayData[currentWeek]) return;
-            
-            const lessons = dayData[currentWeek].filter(lesson => {
-                if (selectedSubgroup !== "all" && !lesson[4].includes(parseInt(selectedSubgroup))) {
-                    return false;
-                }
-                
-                const [timeRange] = lesson;
-                const [startStr] = timeRange.split('–');
-                const [hours, minutes] = startStr.split(':').map(Number);
-                const startMinutes = hours * 60 + minutes;
-                
-                return startMinutes > currentMinutes;
-            });
-            
-            const nextLessonDiv = document.getElementById('nextLesson');
-            
-            if (lessons.length > 0) {
-                const nextLesson = lessons[0];
-                const [timeRange, title] = nextLesson;
-                const [startStr] = timeRange.split('–');
-                
-                const [hours, minutes] = startStr.split(':').map(Number);
-                const startMinutes = hours * 60 + minutes;
-                const diffMinutes = startMinutes - currentMinutes;
-                
-                if (diffMinutes < 60) {
-                    nextLessonDiv.textContent = `Следующая пара: через ${diffMinutes} мин`;
-                } else {
-                    nextLessonDiv.textContent = `Следующая пара: в ${startStr}`;
-                }
-            } else {
-                nextLessonDiv.textContent = 'Пар больше нет сегодня';
-            }
-        }
-
-        // Обновление отображения недель
-        function updateWeekDisplay() {
-            const nextWeek = currentWeek === "верх" ? "низ" : "верх";
-            const currentWeekText = currentWeek === "верх" ? "Верхняя неделя" : "Нижняя неделя";
-            const nextWeekText = nextWeek === "верх" ? "Верхняя неделя" : "Нижняя неделя";
-            
-            document.getElementById('currentWeek').textContent = currentWeekText;
-            document.getElementById('nextWeek').textContent = nextWeekText;
-        }
-
-        // Обновление времени
-        function updateTime() {
-            const now = new Date();
-            const timeString = now.getHours().toString().padStart(2, '0') + ':' + 
-                             now.getMinutes().toString().padStart(2, '0');
-            document.getElementById('currentTime').textContent = timeString;
-        }
-
-        // Инициализация при загрузке
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('Загрузка расписания...');
-            
-            // Назначаем обработчики для дней
-            document.querySelectorAll('.day-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    renderDay(this.dataset.day);
-                });
-            });
-            
-            // Кнопка переключения недели
-            document.getElementById('toggleWeek').addEventListener('click', function() {
-                currentWeek = currentWeek === "верх" ? "низ" : "верх";
-                updateWeekDisplay();
-                renderDay(currentDay);
-            });
-            
-            // Выбор подгруппы
-            document.getElementById('subgroupSelect').addEventListener('change', function() {
-                selectedSubgroup = this.value;
-                renderDay(currentDay);
-            });
-            
-            // Автоматическое определение текущей недели
-            const today = new Date();
-            const weekNumber = Math.floor((today.getDate() - 1) / 7) + 1;
-            currentWeek = weekNumber % 2 === 0 ? "низ" : "верх";
-            
-            // Автовыбор сегодняшнего дня
-            const daysMap = { 1: "pn", 2: "vt", 3: "sr", 4: "cht", 5: "pt", 6: "sb" };
-            const todayDay = today.getDay(); // 0=воскресенье, 1=понедельник
-            if (todayDay >= 1 && todayDay <= 6) {
-                currentDay = daysMap[todayDay];
-            }
-            
-            // Инициализируем отображение
-            updateWeekDisplay();
-            updateTime();
-            setInterval(updateTime, 60000); // Обновляем время каждую минуту
-            
-            // Рендерим начальный день
-            renderDay(currentDay);
-            
-            console.log('Расписание загружено!');
-        });
-    </script>
 </body>
 </html>
