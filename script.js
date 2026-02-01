@@ -90,15 +90,27 @@ let selectedSubgroup = "all";
 let touchStartX = 0;
 let touchEndX = 0;
 
-// Дни недели
+// Ключи для localStorage
+const STORAGE_KEYS = {
+  SUBGROUP: 'pr31_schedule_subgroup',
+  LAST_VISIT: 'pr31_schedule_last_visit'
+};
+
+// Дни недели (добавим воскресенье)
 const days = [
-  { code: "pn", short: "Пн", name: "Понедельник", number: 1 },
-  { code: "vt", short: "Вт", name: "Вторник", number: 2 },
-  { code: "sr", short: "Ср", name: "Среда", number: 3 },
-  { code: "cht", short: "Чт", name: "Четверг", number: 4 },
-  { code: "pt", short: "Пт", name: "Пятница", number: 5 },
-  { code: "sb", short: "Сб", name: "Суббота", number: 6 }
+  { code: "vs", short: "Вс", name: "Воскресенье", number: 0, jsDay: 0 },
+  { code: "pn", short: "Пн", name: "Понедельник", number: 1, jsDay: 1 },
+  { code: "vt", short: "Вт", name: "Вторник", number: 2, jsDay: 2 },
+  { code: "sr", short: "Ср", name: "Среда", number: 3, jsDay: 3 },
+  { code: "cht", short: "Чт", name: "Четверг", number: 4, jsDay: 4 },
+  { code: "pt", short: "Пт", name: "Пятница", number: 5, jsDay: 5 },
+  { code: "sb", short: "Сб", name: "Суббота", number: 6, jsDay: 6 }
 ];
+
+// Константы для автоматического определения недели
+const WEEK_CYCLE_START_DATE = '2024-02-02'; // Дата начала цикла (со 2 февраля)
+const WEEK_CYCLE_DAYS = 7; // 7 дней в неделе
+const START_WEEK_TYPE = 'верх'; // С какой недели начинаем
 
 // Инициализация при загрузке
 document.addEventListener('DOMContentLoaded', function() {
@@ -115,6 +127,12 @@ document.addEventListener('DOMContentLoaded', function() {
 function initApp() {
   // Скрываем индикатор загрузки
   document.getElementById('loadingIndicator').style.display = 'none';
+  
+  // Загружаем сохранённую подгруппу
+  loadSavedSubgroup();
+  
+  // Автоматически выбираем текущий день и неделю
+  autoSelectTodayAndWeek();
   
   // Инициализируем дни недели
   initDays();
@@ -138,14 +156,146 @@ function initApp() {
   // Рендерим начальный день
   renderDay(currentDay);
   
+  // Запускаем периодическую проверку недели
+  setInterval(checkAndUpdateWeek, 300000); // Проверяем каждые 5 минут
+  
+  // Сохраняем время последнего посещения
+  saveLastVisit();
+  
   console.log('Приложение успешно инициализировано');
+  console.log('Текущая неделя:', currentWeek);
+  console.log('Выбранная подгруппа:', selectedSubgroup);
+}
+
+// Функции для работы с localStorage
+function saveSubgroup(subgroup) {
+  try {
+    localStorage.setItem(STORAGE_KEYS.SUBGROUP, subgroup);
+    console.log('Подгруппа сохранена:', subgroup);
+  } catch (error) {
+    console.error('Ошибка сохранения подгруппы:', error);
+  }
+}
+
+function loadSavedSubgroup() {
+  try {
+    const savedSubgroup = localStorage.getItem(STORAGE_KEYS.SUBGROUP);
+    if (savedSubgroup && ['all', '1', '2'].includes(savedSubgroup)) {
+      selectedSubgroup = savedSubgroup;
+      console.log('Загружена сохранённая подгруппа:', savedSubgroup);
+    } else {
+      selectedSubgroup = 'all';
+      console.log('Используется подгруппа по умолчанию: all');
+    }
+  } catch (error) {
+    console.error('Ошибка загрузки подгруппы:', error);
+    selectedSubgroup = 'all';
+  }
+}
+
+function saveLastVisit() {
+  try {
+    const now = new Date().toISOString();
+    localStorage.setItem(STORAGE_KEYS.LAST_VISIT, now);
+    console.log('Время последнего посещения сохранено:', now);
+  } catch (error) {
+    console.error('Ошибка сохранения времени посещения:', error);
+  }
+}
+
+function getLastVisit() {
+  try {
+    const lastVisit = localStorage.getItem(STORAGE_KEYS.LAST_VISIT);
+    return lastVisit ? new Date(lastVisit) : null;
+  } catch (error) {
+    console.error('Ошибка получения времени посещения:', error);
+    return null;
+  }
+}
+
+// Функции для автоматического определения недели
+function getDaysBetweenDates(startDate, endDate) {
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+  
+  // Устанавливаем время на 0:00 для точного расчёта
+  start.setHours(0, 0, 0, 0);
+  end.setHours(0, 0, 0, 0);
+  
+  const diffTime = Math.abs(end - start);
+  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+  
+  return diffDays;
+}
+
+function getWeekNumberFromStart(startDate, currentDate) {
+  const daysBetween = getDaysBetweenDates(startDate, currentDate);
+  const weekNumber = Math.floor(daysBetween / WEEK_CYCLE_DAYS);
+  return weekNumber;
+}
+
+function getCurrentWeekType() {
+  const currentDate = new Date();
+  const weekNumber = getWeekNumberFromStart(WEEK_CYCLE_START_DATE, currentDate);
+  
+  // Определяем тип недели
+  // Если номер недели чётный - начальный тип, нечётный - противоположный
+  let weekType;
+  if (weekNumber % 2 === 0) {
+    weekType = START_WEEK_TYPE;
+  } else {
+    weekType = START_WEEK_TYPE === 'верх' ? 'низ' : 'верх';
+  }
+  
+  return weekType;
+}
+
+function autoSelectTodayAndWeek() {
+  const today = new Date();
+  const dayOfWeek = today.getDay(); // 0 - воскресенье, 1 - понедельник и т.д.
+  
+  // Находим соответствующий день в массиве days
+  const todayDay = days.find(day => day.jsDay === dayOfWeek);
+  
+  // Выбираем текущий день
+  if (todayDay) {
+    currentDay = todayDay.code;
+  } else {
+    // Если вдруг не нашли (теоретически не должно случиться)
+    currentDay = "pn";
+  }
+  
+  // Определяем текущую неделю
+  currentWeek = getCurrentWeekType();
+  
+  console.log('Автоматический выбор:', {
+    date: today.toLocaleDateString(),
+    dayOfWeek: dayOfWeek,
+    day: currentDay,
+    week: currentWeek,
+    dayName: todayDay ? todayDay.name : 'Не определено'
+  });
+}
+
+function checkAndUpdateWeek() {
+  const calculatedWeek = getCurrentWeekType();
+  
+  if (calculatedWeek !== currentWeek) {
+    currentWeek = calculatedWeek;
+    updateWeekDisplay();
+    renderDay(currentDay);
+    showNotification(`Автоматически переключено на ${currentWeek === 'верх' ? 'верхнюю' : 'нижнюю'} неделю`);
+  }
 }
 
 function initDays() {
   const daysContainer = document.getElementById('daysScroll');
   daysContainer.innerHTML = '';
   
-  days.forEach(day => {
+  // Фильтруем дни - показываем только рабочие дни (с понедельника по субботу)
+  const workingDays = days.filter(day => day.code !== "vs"); // Убираем воскресенье из табов
+  
+  workingDays.forEach(day => {
     const dayTab = document.createElement('div');
     dayTab.className = `day-tab ${day.code === currentDay ? 'active' : ''}`;
     dayTab.dataset.day = day.code;
@@ -163,6 +313,16 @@ function initDays() {
   
   // Добавляем свайп для дней
   setupSwipe(daysContainer);
+  
+  // Обновляем активные кнопки в меню
+  updateMenuButtons();
+}
+
+function updateMenuButtons() {
+  // Обновляем кнопки подгрупп в меню
+  document.querySelectorAll('.sub-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.subgroup === selectedSubgroup);
+  });
 }
 
 function setupSwipe(container) {
@@ -181,20 +341,31 @@ function handleSwipe() {
   const diff = touchStartX - touchEndX;
   
   if (Math.abs(diff) > swipeThreshold) {
-    const currentIndex = days.findIndex(d => d.code === currentDay);
+    // Фильтруем только рабочие дни для свайпа
+    const workingDays = days.filter(day => day.code !== "vs");
+    const currentIndex = workingDays.findIndex(d => d.code === currentDay);
     
-    if (diff > 0 && currentIndex < days.length - 1) {
+    if (diff > 0 && currentIndex < workingDays.length - 1) {
       // Свайп влево - следующий день
-      selectDay(days[currentIndex + 1].code);
+      selectDay(workingDays[currentIndex + 1].code);
     } else if (diff < 0 && currentIndex > 0) {
       // Свайп вправо - предыдущий день
-      selectDay(days[currentIndex - 1].code);
+      selectDay(workingDays[currentIndex - 1].code);
     }
   }
 }
 
 function selectDay(dayCode) {
-  if (!schedule[dayCode]) return;
+  if (!schedule[dayCode]) {
+    // Для воскресенья показываем особое сообщение
+    if (dayCode === "vs") {
+      currentDay = dayCode;
+      showSundayMessage();
+      updateDateDisplay();
+      return;
+    }
+    return;
+  }
   
   currentDay = dayCode;
   
@@ -213,6 +384,22 @@ function selectDay(dayCode) {
   scrollToActiveDay();
 }
 
+function showSundayMessage() {
+  const box = document.getElementById('schedule');
+  box.innerHTML = `
+    <div class="no-lessons">
+      <i class="fas fa-church"></i>
+      <p>Воскресенье - выходной день! 🎉</p>
+      <p style="margin-top: 10px; font-size: 0.9rem;">Отдыхайте и набирайтесь сил</p>
+    </div>
+  `;
+  
+  // Обновляем активную вкладку
+  document.querySelectorAll('.day-tab').forEach(tab => {
+    tab.classList.remove('active');
+  });
+}
+
 function scrollToActiveDay() {
   const activeTab = document.querySelector('.day-tab.active');
   if (activeTab) {
@@ -225,17 +412,43 @@ function scrollToActiveDay() {
 }
 
 function updateDateDisplay() {
-  const day = days.find(d => d.code === currentDay);
-  if (!day) return;
-  
   const now = new Date();
-  const options = { weekday: 'long', day: 'numeric', month: 'long' };
+  const dayOfWeek = now.getDay();
+  
+  // Находим день в массиве days
+  const todayDay = days.find(day => day.jsDay === dayOfWeek);
+  const weekType = getCurrentWeekType();
+  
+  // Форматируем дату
+  const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
   const dateString = now.toLocaleDateString('ru-RU', options);
   
-  document.getElementById('currentDate').innerHTML = `
-    <i class="fas fa-calendar-day"></i>
-    <span>${day.name}, ${dateString.split(',')[1]}</span>
-  `;
+  // Получаем номер недели от начальной даты
+  const daysFromStart = getDaysBetweenDates(WEEK_CYCLE_START_DATE, now);
+  const weekNumber = Math.floor(daysFromStart / WEEK_CYCLE_DAYS) + 1;
+  
+  // Если сегодня воскресенье
+  if (dayOfWeek === 0) {
+    document.getElementById('currentDate').innerHTML = `
+      <i class="fas fa-calendar-day"></i>
+      <div>
+        <div style="font-weight: 700; color: var(--primary-color);">${todayDay.name}, ${dateString.split(',')[1]}</div>
+        <div style="font-size: 0.85rem; opacity: 0.8;">Выходной день • ${weekType === 'верх' ? 'Верхняя' : 'Нижняя'} неделя</div>
+      </div>
+    `;
+  } else {
+    // Для рабочих дней
+    const selectedDay = days.find(d => d.code === currentDay);
+    const dayName = selectedDay ? selectedDay.name : todayDay.name;
+    
+    document.getElementById('currentDate').innerHTML = `
+      <i class="fas fa-calendar-day"></i>
+      <div>
+        <div style="font-weight: 700;">${dayName}, ${dateString.split(',')[1]}</div>
+        <div style="font-size: 0.85rem; opacity: 0.8;">${weekType === 'верх' ? 'Верхняя' : 'Нижняя'} неделя (${weekNumber}-я от 02.02)</div>
+      </div>
+    `;
+  }
 }
 
 function updateWeekDisplay() {
@@ -245,6 +458,13 @@ function updateWeekDisplay() {
     currentWeek === 'верх' ? 'Верхняя' : 'Нижняя';
   
   document.getElementById('nextWeekMobile').textContent = 
+    nextWeek === 'верх' ? 'Верхняя' : 'Нижняя';
+    
+  // Обновляем информацию в меню
+  document.getElementById('currentWeekInfo').textContent = 
+    currentWeek === 'верх' ? 'Верхняя' : 'Нижняя';
+    
+  document.getElementById('nextWeekInfo').textContent = 
     nextWeek === 'верх' ? 'Верхняя' : 'Нижняя';
 }
 
@@ -261,9 +481,16 @@ function getNextWeek(current) {
 }
 
 function renderDay(day) {
-  console.log(`Рендерим день: ${day}, неделя: ${currentWeek}`);
+  console.log(`Рендерим день: ${day}, неделя: ${currentWeek}, подгруппа: ${selectedSubgroup}`);
   
   const box = document.getElementById('schedule');
+  
+  // Если воскресенье
+  if (day === "vs") {
+    showSundayMessage();
+    return;
+  }
+  
   const dayData = schedule[day];
   
   if (!dayData) {
@@ -365,9 +592,51 @@ function updateNextLessonInfo() {
   const now = new Date();
   const currentMinutes = now.getHours() * 60 + now.getMinutes();
   
-  const dayData = schedule[currentDay];
-  if (!dayData || !dayData[currentWeek]) return;
+  // Если воскресенье или нет расписания для этого дня
+  if (currentDay === "vs" || !schedule[currentDay] || !schedule[currentDay][currentWeek]) {
+    const nextLessonInfo = document.getElementById('nextLessonInfo');
+    
+    // Проверяем, какой день будет завтра
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const tomorrowDayOfWeek = tomorrow.getDay();
+    
+    // Находим следующий рабочий день
+    let nextWorkDay = null;
+    for (let i = 1; i <= 7; i++) {
+      const nextDay = new Date();
+      nextDay.setDate(nextDay.getDate() + i);
+      const nextDayOfWeek = nextDay.getDay();
+      if (nextDayOfWeek !== 0) { // Не воскресенье
+        const dayCode = days.find(d => d.jsDay === nextDayOfWeek)?.code;
+        if (dayCode && schedule[dayCode]) {
+          nextWorkDay = {
+            date: nextDay,
+            dayCode: dayCode,
+            dayName: days.find(d => d.jsDay === nextDayOfWeek)?.name
+          };
+          break;
+        }
+      }
+    }
+    
+    if (nextWorkDay) {
+      const options = { weekday: 'short', day: 'numeric', month: 'short' };
+      const nextDateStr = nextWorkDay.date.toLocaleDateString('ru-RU', options);
+      nextLessonInfo.innerHTML = `
+        <i class="fas fa-calendar-alt"></i>
+        <span>Следующая пара: ${nextWorkDay.dayName.toLowerCase()}</span>
+      `;
+    } else {
+      nextLessonInfo.innerHTML = `
+        <i class="fas fa-check-circle"></i>
+        <span>Пар больше нет</span>
+      `;
+    }
+    return;
+  }
   
+  const dayData = schedule[currentDay];
   const lessons = dayData[currentWeek].filter(lesson => {
     if (selectedSubgroup !== "all" && !lesson[4].includes(parseInt(selectedSubgroup))) {
       return false;
@@ -422,13 +691,13 @@ function setupEventListeners() {
   
   // Кнопка "Сегодня"
   document.getElementById('todayBtn').addEventListener('click', () => {
-    const today = new Date().getDay();
-    const adjustedDay = today === 0 ? 6 : today - 1;
-    
-    if (adjustedDay < 6 && days[adjustedDay]) {
-      selectDay(days[adjustedDay].code);
-      showNotification('Переход на сегодняшний день');
-    }
+    autoSelectTodayAndWeek();
+    updateDateDisplay();
+    updateWeekDisplay();
+    initDays();
+    renderDay(currentDay);
+    scrollToActiveDay();
+    showNotification('Переход на сегодняшний день');
   });
   
   // Кнопка меню настроек
@@ -441,8 +710,15 @@ function setupEventListeners() {
   
   // Плавающая кнопка
   document.getElementById('floatingActionBtn').addEventListener('click', () => {
-    selectDay('pn');
-    showNotification('Переход на понедельник');
+    // Если сегодня воскресенье, переходим на понедельник
+    const today = new Date();
+    if (today.getDay() === 0) {
+      selectDay('pn');
+      showNotification('Переход на понедельник');
+    } else {
+      selectDay('pn');
+      showNotification('Переход на понедельник');
+    }
   });
   
   // Выбор подгруппы в меню
@@ -451,10 +727,11 @@ function setupEventListeners() {
       const subgroup = btn.dataset.subgroup;
       selectedSubgroup = subgroup;
       
+      // Сохраняем выбор в localStorage
+      saveSubgroup(subgroup);
+      
       // Обновляем кнопки в меню
-      document.querySelectorAll('.sub-btn').forEach(b => {
-        b.classList.toggle('active', b.dataset.subgroup === subgroup);
-      });
+      updateMenuButtons();
       
       // Обновляем отображение
       updateSubgroupDisplay();
@@ -470,6 +747,9 @@ function openMenu() {
   document.getElementById('mobileMenu').classList.add('active');
   document.getElementById('menuOverlay').classList.add('active');
   document.body.style.overflow = 'hidden';
+  
+  // При открытии меню обновляем активные кнопки
+  updateMenuButtons();
 }
 
 function closeMenu() {
@@ -500,26 +780,3 @@ function showError(message) {
     </div>
   `;
 }
-
-// Автоматическое определение текущей недели
-function getCurrentWeek() {
-  const today = new Date();
-  const weekNumber = Math.floor((today.getDate() - 1) / 7) + 1;
-  return weekNumber % 2 === 0 ? "низ" : "верх";
-}
-
-// Автоматический выбор текущего дня при загрузке
-function autoSelectToday() {
-  const today = new Date().getDay();
-  const adjustedDay = today === 0 ? 6 : today - 1;
-  
-  if (adjustedDay < 6 && days[adjustedDay]) {
-    currentDay = days[adjustedDay].code;
-  }
-  
-  // Определяем текущую неделю
-  currentWeek = getCurrentWeek();
-}
-
-// Запускаем автоопределение при загрузке
-autoSelectToday();

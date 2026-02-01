@@ -33,33 +33,25 @@
         <div class="menu-section">
             <h4><i class="fas fa-users"></i> Моя подгруппа</h4>
             <div class="subgroup-selector">
-                <button class="sub-btn ${selectedSubgroup === 'all' ? 'active' : ''}" data-subgroup="all">
+                <button class="sub-btn" data-subgroup="all">
                     <i class="fas fa-users"></i> Все
                 </button>
-                <button class="sub-btn ${selectedSubgroup === '1' ? 'active' : ''}" data-subgroup="1">
+                <button class="sub-btn" data-subgroup="1">
                     <i class="fas fa-user"></i> 1-я
                 </button>
-                <button class="sub-btn ${selectedSubgroup === '2' ? 'active' : ''}" data-subgroup="2">
+                <button class="sub-btn" data-subgroup="2">
                     <i class="fas fa-user"></i> 2-я
                 </button>
             </div>
         </div>
         
         <div class="menu-section">
-            <h4><i class="fas fa-calendar-week"></i> Автопереключение</h4>
-            <div class="toggle-switch">
-                <span>Автовыбор дня</span>
-                <label class="switch">
-                    <input type="checkbox" id="autoDayToggle" checked>
-                    <span class="slider"></span>
-                </label>
-            </div>
-            <div class="toggle-switch">
-                <span>Автовыбор недели</span>
-                <label class="switch">
-                    <input type="checkbox" id="autoWeekToggle" checked>
-                    <span class="slider"></span>
-                </label>
+            <h4><i class="fas fa-calendar-week"></i> Информация о неделях</h4>
+            <div class="info-box">
+                <p><i class="fas fa-calendar-check"></i> <strong>Текущая неделя:</strong> <span id="currentWeekInfo">Верхняя</span></p>
+                <p><i class="fas fa-calendar-alt"></i> <strong>Дата начала:</strong> 02.02.2024</p>
+                <p><i class="fas fa-sync-alt"></i> <strong>Цикл:</strong> 7 дней</p>
+                <p><i class="fas fa-info-circle"></i> <strong>Следующая неделя:</strong> <span id="nextWeekInfo">Нижняя</span></p>
             </div>
         </div>
         
@@ -67,7 +59,7 @@
             <h4><i class="fas fa-info-circle"></i> Информация</h4>
             <div class="info-box">
                 <p><i class="fas fa-code"></i> Разработчик: Группа ПР-31</p>
-                <p><i class="fas fa-sync-alt"></i> Данные обновляются автоматически</p>
+                <p><i class="fas fa-sync-alt"></i> Недели переключаются автоматически</p>
             </div>
         </div>
     </div>
