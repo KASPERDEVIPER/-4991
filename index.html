@@ -1,52 +1,91 @@
-const hours =
-        String(now.getHours()).padStart(2, "0");
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Расписание — группа 4991</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
 
-    const minutes =
-        String(now.getMinutes()).padStart(2, "0");
+<header class="header">
+    <div>
+        <h1>Расписание</h1>
+        <p>Группа 4991 · 2026–2027 учебный год</p>
+    </div>
+</header>
 
-    const timeElement =
-        document.getElementById("currentTime");
+<main class="container">
 
-    if (timeElement) {
-        timeElement.textContent =
-            ${hours}:${minutes};
-    }
-}
+    <div class="date-info">
+        <div class="current-date" id="currentDate">
+            <i class="fa-solid fa-calendar-day"></i>
+            <span></span>
+        </div>
+        <button class="today-btn" id="todayBtn">
+            <i class="fa-solid fa-house"></i>
+            Сегодня
+        </button>
+    </div>
 
-setInterval(updateCurrentTime, 1000);
-updateCurrentTime();
+    <div class="week-info">
+        <div>
+            <div class="week-label">
+                <i class="fa-solid fa-play-circle"></i>
+                Текущая неделя
+            </div>
+            <strong id="currentWeek">Верхняя</strong>
+        </div>
 
+        <button class="week-toggle" id="toggleWeek">
+            <i class="fa-solid fa-repeat"></i>
+            Сменить
+        </button>
 
-/* ==========================================
-   ЗАПУСК
-   ========================================== */
+        <div class="next-week">
+            <div class="week-label">
+                <i class="fa-solid fa-forward"></i>
+                Следующая
+            </div>
+            <strong id="nextWeek">Нижняя</strong>
+        </div>
+    </div>
 
-document.addEventListener("DOMContentLoaded", () => {
+    <div class="days-scroll-container">
+        <div class="days-scroll" id="daysScroll"></div>
+        <div class="scroll-hint">
+            <i class="fa-solid fa-arrows-left-right"></i>
+            Листайте
+        </div>
+    </div>
 
-    renderDays();
+    <div class="filter-bar">
+        <div class="active-subgroup">
+            <i class="fa-solid fa-user-group"></i>
+            <span>Группа 4991</span>
+        </div>
+    </div>
 
-    const today = getCurrentDay();
+    <section class="schedule-container">
+        <div id="schedule"></div>
+    </section>
 
-    const buttons = document.querySelectorAll(".day-button");
+    <div class="time-indicator">
+        <div class="current-time">
+            <i class="fa-regular fa-clock"></i>
+            <span id="currentTime">00:00</span>
+        </div>
+        <div id="nextLessonInfo">Следующая пара: —</div>
+    </div>
 
-    buttons.forEach(button => {
+</main>
 
-        const day =
-            button.querySelector(".day-full")?.textContent.trim();
+<div class="notification" id="notification">
+    <i class="fa-solid fa-bell"></i>
+    <span id="notificationText"></span>
+</div>
 
-        if (day === today) {
-            button.classList.add("active");
-        }
-    });
-
-    renderSchedule(today);
-
-    const loading =
-        document.getElementById("loadingIndicator");
-
-    if (loading) {
-        loading.style.display = "none";
-    }
-});
-
-</script>
+<script src="script.js"></script>
+</body>
+</html>
