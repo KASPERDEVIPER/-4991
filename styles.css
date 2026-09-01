@@ -1,851 +1,337 @@
-/* Reset для мобильных */
 * {
-    margin: 0;
-    padding: 0;
     box-sizing: border-box;
-    -webkit-tap-highlight-color: transparent;
 }
 
 :root {
-    --primary-color: #00ff7f;
-    --primary-dark: #00cc66;
-    --secondary-color: #ff6b6b;
-    --bg-dark: #0a0a0a;
-    --bg-card: #1a1a1a;
-    --bg-surface: #222;
-    --text-primary: #ffffff;
-    --text-secondary: #cccccc;
-    --text-muted: #888888;
-    --border-color: #333333;
-    --success-color: #00ff7f;
-    --warning-color: #ffaa00;
-    --info-color: #3498db;
-}
-
-html {
-    font-size: 16px;
-    height: 100%;
+    --bg: #f4f6f8;
+    --card: #ffffff;
+    --text: #202124;
+    --muted: #6b7280;
+    --accent: #2563eb;
+    --accent-light: #eaf1ff;
+    --border: #e5e7eb;
+    --shadow: 0 8px 25px rgba(0,0,0,.07);
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-    background: var(--bg-dark);
-    color: var(--text-primary);
-    line-height: 1.5;
-    min-height: 100%;
-    overflow-x: hidden;
-    padding-bottom: 80px; /* Для нижнего индикатора */
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
 }
 
-/* Мобильный хедер */
-.mobile-header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    background: linear-gradient(135deg, var(--bg-card), var(--bg-surface));
-    padding: 12px 16px;
-    z-index: 1000;
-    border-bottom: 1px solid var(--border-color);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+.header {
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+    padding: 22px 20px;
 }
 
-.mobile-header .header-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.header h1 {
+    margin: 0 0 5px;
+    font-size: 28px;
 }
 
-.mobile-header h1 {
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: var(--primary-color);
-    display: flex;
-    align-items: center;
-    gap: 10px;
+.header p {
+    margin: 0;
+    color: var(--muted);
 }
 
-.mobile-header h1 i {
-    font-size: 1.1rem;
-}
-
-.menu-toggle {
-    width: 44px;
-    height: 44px;
-    border-radius: 12px;
-    background: var(--bg-surface);
-    border: 1px solid var(--border-color);
-    color: var(--primary-color);
-    font-size: 1.2rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.menu-toggle:active {
-    background: var(--border-color);
-    transform: scale(0.95);
-}
-
-/* Боковое меню */
-.mobile-menu {
-    position: fixed;
-    top: 0;
-    left: -100%;
-    width: 85%;
-    max-width: 320px;
-    height: 100%;
-    background: var(--bg-card);
-    z-index: 2000;
-    transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 5px 0 30px rgba(0, 0, 0, 0.5);
-    display: flex;
-    flex-direction: column;
-}
-
-.mobile-menu.active {
-    left: 0;
-}
-
-.menu-header {
-    padding: 20px;
-    background: var(--bg-surface);
-    border-bottom: 1px solid var(--border-color);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.menu-header h3 {
-    font-size: 1.1rem;
-    color: var(--text-primary);
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.close-menu {
-    width: 36px;
-    height: 36px;
-    border-radius: 10px;
-    background: var(--bg-surface);
-    border: none;
-    color: var(--text-secondary);
-    font-size: 1rem;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.menu-content {
-    flex: 1;
-    overflow-y: auto;
-    padding: 20px;
-}
-
-.menu-section {
-    margin-bottom: 25px;
-}
-
-.menu-section h4 {
-    font-size: 0.9rem;
-    color: var(--text-secondary);
-    margin-bottom: 12px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.subgroup-selector {
-    display: flex;
-    gap: 8px;
-}
-
-.sub-btn {
-    flex: 1;
-    padding: 12px;
-    background: var(--bg-surface);
-    border: 2px solid var(--border-color);
-    border-radius: 10px;
-    color: var(--text-secondary);
-    font-weight: 600;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    transition: all 0.2s;
-}
-
-.sub-btn.active {
-    background: var(--primary-color);
-    color: var(--bg-dark);
-    border-color: var(--primary-color);
-}
-
-.toggle-switch {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 0;
-    border-bottom: 1px solid var(--border-color);
-}
-
-.toggle-switch span {
-    font-size: 0.95rem;
-    color: var(--text-secondary);
-}
-
-.switch {
-    position: relative;
-    display: inline-block;
-    width: 50px;
-    height: 26px;
-}
-
-.switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-}
-
-.slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: var(--border-color);
-    transition: .4s;
-    border-radius: 34px;
-}
-
-.slider:before {
-    position: absolute;
-    content: "";
-    height: 18px;
-    width: 18px;
-    left: 4px;
-    bottom: 4px;
-    background-color: white;
-    transition: .4s;
-    border-radius: 50%;
-}
-
-input:checked + .slider {
-    background-color: var(--primary-color);
-}
-
-input:checked + .slider:before {
-    transform: translateX(24px);
-}
-
-.info-box {
-    background: var(--bg-surface);
-    border-radius: 10px;
-    padding: 15px;
-    font-size: 0.85rem;
-    color: var(--text-secondary);
-}
-
-.info-box p {
-    margin-bottom: 8px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.info-box p:last-child {
-    margin-bottom: 0;
-}
-
-/* Оверлей меню */
-.menu-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.7);
-    z-index: 1500;
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.3s;
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
-}
-
-.menu-overlay.active {
-    opacity: 1;
-    visibility: visible;
-}
-
-/* Основной контейнер */
 .container {
-    max-width: 100%;
-    padding: 80px 16px 90px;
+    width: min(100% - 24px, 900px);
+    margin: 20px auto 40px;
 }
 
-/* Дата и день */
+.date-info,
+.week-info,
+.filter-bar,
+.time-indicator {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+}
+
 .date-info {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
-    gap: 10px;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 15px 18px;
+    margin-bottom: 12px;
 }
 
 .current-date {
-    flex: 1;
-    background: var(--bg-card);
-    padding: 14px;
-    border-radius: 14px;
-    border: 1px solid var(--border-color);
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
     font-weight: 600;
-    font-size: 1rem;
 }
 
 .current-date i {
-    color: var(--primary-color);
-    font-size: 1.1rem;
+    color: var(--accent);
 }
 
-.today-btn {
-    padding: 14px 20px;
-    background: var(--primary-color);
-    border: none;
-    border-radius: 14px;
-    color: var(--bg-dark);
-    font-weight: 700;
-    font-size: 1rem;
+.today-btn,
+.week-toggle {
+    border: 0;
+    background: var(--accent);
+    color: white;
+    padding: 10px 14px;
+    border-radius: 11px;
     cursor: pointer;
-    display: flex;
+    font-weight: 600;
+}
+
+.week-info {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
     align-items: center;
-    gap: 8px;
-    white-space: nowrap;
-    transition: transform 0.2s;
+    gap: 15px;
+    padding: 15px 18px;
+    margin-bottom: 12px;
 }
 
-.today-btn:active {
-    transform: scale(0.95);
+.next-week {
+    text-align: right;
 }
 
-/* Информация о неделях */
-.week-info-mobile {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: var(--bg-card);
-    border-radius: 14px;
-    padding: 16px;
-    margin-bottom: 20px;
-    border: 1px solid var(--border-color);
+.week-label {
+    color: var(--muted);
+    font-size: 13px;
+    margin-bottom: 4px;
 }
 
-.current-week-mobile, .next-week-mobile {
-    flex: 1;
-    text-align: center;
-}
-
-.week-label-mobile {
-    font-size: 0.8rem;
-    color: var(--text-muted);
-    margin-bottom: 6px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-}
-
-.week-name-mobile {
-    font-size: 1.1rem;
-    font-weight: 800;
-    color: var(--text-primary);
-}
-
-.current-week-mobile .week-name-mobile {
-    color: var(--primary-color);
-}
-
-.next-week-mobile .week-name-mobile {
-    color: var(--text-secondary);
-}
-
-.week-toggle-mobile {
-    padding: 12px 20px;
-    background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
-    border: none;
-    border-radius: 12px;
-    color: var(--bg-dark);
-    font-weight: 700;
-    font-size: 0.9rem;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin: 0 10px;
-    transition: transform 0.2s;
-}
-
-.week-toggle-mobile:active {
-    transform: scale(0.95);
-}
-
-/* Навигация по дням */
 .days-scroll-container {
-    margin-bottom: 20px;
-    position: relative;
+    margin-bottom: 12px;
 }
 
 .days-scroll {
     display: flex;
+    gap: 8px;
     overflow-x: auto;
-    gap: 8px;
-    padding: 10px 5px;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-    scroll-behavior: smooth;
+    padding: 3px 1px 9px;
+    scrollbar-width: thin;
 }
 
-.days-scroll::-webkit-scrollbar {
-    display: none;
-}
-
-.day-tab {
-    min-width: 70px;
-    padding: 14px 8px;
-    background: var(--bg-surface);
-    border: 2px solid var(--border-color);
+.day-button {
+    flex: 0 0 auto;
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: var(--text);
     border-radius: 12px;
-    text-align: center;
+    padding: 10px 17px;
     cursor: pointer;
-    transition: all 0.3s;
-    flex-shrink: 0;
-}
-
-.day-tab.active {
-    background: var(--primary-color);
-    color: var(--bg-dark);
-    border-color: var(--primary-color);
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0, 255, 127, 0.3);
-}
-
-.day-tab:active {
-    transform: scale(0.95);
-}
-
-.day-short {
-    font-size: 0.9rem;
     font-weight: 600;
-    margin-bottom: 4px;
+    min-width: 75px;
 }
 
-.day-number {
-    font-size: 1.5rem;
-    font-weight: 800;
+.day-button.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: white;
 }
 
-.scroll-hint {
-    text-align: center;
-    padding: 8px;
-    color: var(--text-muted);
-    font-size: 0.8rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
+.day-button .day-short {
+    display: block;
+    font-size: 12px;
+    opacity: .75;
 }
 
-/* Панель фильтров */
-.filter-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    gap: 10px;
-}
-
-.active-subgroup {
-    flex: 1;
-    background: rgba(0, 255, 127, 0.1);
-    border: 1px solid var(--primary-color);
-    border-radius: 12px;
-    padding: 14px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 0.9rem;
-    color: var(--text-secondary);
-}
-
-.active-subgroup i {
-    color: var(--primary-color);
-    font-size: 1rem;
-}
-
-.filter-btn {
-    padding: 14px 20px;
-    background: var(--bg-surface);
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-    color: var(--text-primary);
-    font-weight: 600;
-    font-size: 0.9rem;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    white-space: nowrap;
-    transition: all 0.2s;
-}
-
-.filter-btn:active {
-    background: var(--border-color);
-    transform: scale(0.95);
-}
-
-/* Основное расписание */
-.schedule-container {
-    position: relative;
-}
-
-.schedule-content {
-    min-height: 300px;
-}
-
-.loading-indicator {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
-    color: var(--text-muted);
-}
-
-.spinner {
-    width: 40px;
-    height: 40px;
-    border: 3px solid var(--border-color);
-    border-top-color: var(--primary-color);
-    border-radius: 50%;
-    margin: 0 auto 15px;
-    animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-    to { transform: rotate(360deg); }
-}
-
-/* Карточка занятия */
-.lesson-card {
-    background: var(--bg-card);
-    border-radius: 16px;
-    margin-bottom: 12px;
-    overflow: hidden;
-    border: 1px solid var(--border-color);
-    transition: transform 0.2s;
-}
-
-.lesson-card:active {
-    transform: scale(0.99);
-}
-
-.lesson-card.upper-week {
-    border-left: 5px solid var(--primary-color);
-}
-
-.lesson-card.lower-week {
-    border-left: 5px solid var(--secondary-color);
-}
-
-.lesson-header {
-    padding: 18px;
-    border-bottom: 1px solid var(--border-color);
-}
-
-.lesson-time {
-    font-size: 1.3rem;
-    font-weight: 800;
-    color: var(--primary-color);
-    margin-bottom: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.week-indicator-badge {
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-size: 0.75rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.upper-week .week-indicator-badge {
-    background: rgba(0, 255, 127, 0.15);
-    color: var(--primary-color);
-}
-
-.lower-week .week-indicator-badge {
-    background: rgba(255, 107, 107, 0.15);
-    color: var(--secondary-color);
-}
-
-.lesson-title {
-    font-size: 1.1rem;
-    font-weight: 700;
-    margin-bottom: 8px;
-    line-height: 1.4;
-}
-
-.lesson-content {
-    padding: 18px;
-}
-
-.lesson-detail {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    margin-bottom: 12px;
-    font-size: 0.9rem;
-    color: var(--text-secondary);
-}
-
-.lesson-detail i {
-    color: var(--primary-color);
-    font-size: 1rem;
-    min-width: 20px;
+.day-button .day-full {
+    display: block;
     margin-top: 2px;
 }
 
-.subgroup-tag {
-    display: inline-block;
-    padding: 6px 14px;
-    background: rgba(0, 255, 127, 0.1);
-    border: 1px solid var(--primary-color);
-    border-radius: 20px;
-    font-size: 0.8rem;
-    font-weight: 700;
-    color: var(--primary-color);
-    margin-top: 10px;
-}
-
-/* Состояния */
-.no-lessons {
+.scroll-hint {
+    color: var(--muted);
+    font-size: 12px;
     text-align: center;
-    padding: 50px 20px;
-    color: var(--text-muted);
-    font-size: 1.1rem;
-    background: var(--bg-card);
-    border-radius: 16px;
-    border: 2px dashed var(--border-color);
 }
 
-.no-lessons i {
-    font-size: 3rem;
-    margin-bottom: 15px;
-    display: block;
-    color: var(--border-color);
+.filter-bar {
+    padding: 13px 17px;
+    margin-bottom: 12px;
 }
 
-/* Индикатор времени */
-.time-indicator {
-    position: fixed;
-    bottom: 20px;
-    left: 16px;
-    right: 16px;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 16px;
-    padding: 16px;
+.active-subgroup {
     display: flex;
-    justify-content: space-between;
+    gap: 9px;
     align-items: center;
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    z-index: 900;
+    font-weight: 600;
 }
 
-.current-time {
+.active-subgroup i {
+    color: var(--accent);
+}
+
+.schedule-container {
     display: flex;
-    align-items: center;
+    flex-direction: column;
     gap: 10px;
 }
 
-.current-time i {
-    color: var(--primary-color);
-    font-size: 1.2rem;
+.lesson {
+    display: grid;
+    grid-template-columns: 115px 1fr;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
 }
 
-#currentTime {
-    font-size: 1.5rem;
-    font-weight: 800;
-    color: var(--primary-color);
-}
-
-.next-lesson-info {
-    font-size: 0.8rem;
-    color: var(--text-secondary);
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    text-align: right;
-    max-width: 60%;
-}
-
-.next-lesson-info i {
-    color: var(--primary-color);
-}
-
-/* Плавающая кнопка */
-.floating-action-btn {
-    position: fixed;
-    bottom: 90px;
-    right: 20px;
-    width: 56px;
-    height: 56px;
-    background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
-    border: none;
-    border-radius: 50%;
-    color: var(--bg-dark);
-    font-size: 1.5rem;
-    cursor: pointer;
-    z-index: 1000;
-    box-shadow: 0 6px 20px rgba(0, 255, 127, 0.4);
+.lesson-time {
+    background: var(--accent-light);
+    color: #1745a5;
+    font-weight: 700;
+    padding: 22px 12px;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.3s;
+    text-align: center;
 }
 
-.floating-action-btn:active {
-    transform: scale(0.9) rotate(90deg);
-    box-shadow: 0 3px 10px rgba(0, 255, 127, 0.4);
+.lesson-info {
+    padding: 18px 20px;
+    min-height: 90px;
 }
 
-/* Уведомления */
+.lesson-subject {
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 1.35;
+}
+
+.lesson-teacher,
+.lesson-room {
+    color: var(--muted);
+    margin-top: 7px;
+    font-size: 14px;
+}
+
+.lesson-room {
+    display: inline-block;
+    margin-right: 8px;
+}
+
+.lesson.teacher-only {}
+
+.empty-lesson {
+    opacity: .7;
+}
+
+.empty-text {
+    color: #9ca3af;
+    font-size: 24px;
+    text-align: center;
+    padding: 8px;
+}
+
+.parallel-lessons {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.parallel-item {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 8px;
+}
+
+.parallel-item:last-child {
+    border-bottom: 0;
+    padding-bottom: 0;
+}
+
+.time-indicator {
+    margin-top: 14px;
+    padding: 14px 18px;
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    color: var(--muted);
+}
+
+.current-time {
+    color: var(--text);
+    font-weight: 700;
+}
+
 .notification {
     position: fixed;
-    top: 80px;
-    left: 16px;
-    right: 16px;
-    background: var(--primary-color);
+    left: 50%;
+    bottom: 20px;
+    transform: translate(-50%, 120px);
+    background: #202124;
+    color: white;
+    padding: 13px 18px;
     border-radius: 12px;
-    padding: 16px;
-    color: var(--bg-dark);
-    font-weight: 600;
-    z-index: 2000;
-    transform: translateY(-100px);
-    opacity: 0;
-    transition: all 0.3s;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    display: flex;
+    gap: 9px;
+    transition: .25s;
+    z-index: 10;
 }
 
 .notification.show {
-    transform: translateY(0);
-    opacity: 1;
+    transform: translate(-50%, 0);
 }
 
-.notification-content {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.notification-content i {
-    font-size: 1.2rem;
-}
-
-/* Анимации */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.lesson-card {
-    animation: fadeIn 0.4s ease-out;
-}
-
-/* Адаптация для различных размеров экрана */
-@media (max-width: 360px) {
-    html {
-        font-size: 14px;
-    }
-    
+@media (max-width: 600px) {
     .container {
-        padding: 70px 12px 90px;
+        width: min(100% - 14px, 900px);
+        margin-top: 10px;
     }
-    
-    .day-tab {
-        min-width: 65px;
-        padding: 12px 6px;
-    }
-    
-    .lesson-header,
-    .lesson-content {
-        padding: 15px;
-    }
-}
 
-/* Поддержка safe areas для iPhone X и выше */
-@supports (padding: max(0px)) {
-    .container {
-        padding-left: max(16px, env(safe-area-inset-left));
-        padding-right: max(16px, env(safe-area-inset-right));
-        padding-bottom: max(90px, env(safe-area-inset-bottom) + 70px);
+    .header {
+        padding: 18px 14px;
     }
-    
-    .mobile-header {
-        padding-top: max(12px, env(safe-area-inset-top));
-        padding-left: max(16px, env(safe-area-inset-left));
-        padding-right: max(16px, env(safe-area-inset-right));
+
+    .header h1 {
+        font-size: 23px;
     }
-    
-    .floating-action-btn {
-        bottom: max(90px, env(safe-area-inset-bottom) + 70px);
-        right: max(20px, env(safe-area-inset-right) + 10px);
+
+    .date-info {
+        align-items: stretch;
     }
-    
+
+    .date-info,
+    .week-info,
     .time-indicator {
-        bottom: max(20px, env(safe-area-inset-bottom));
-        left: max(16px, env(safe-area-inset-left));
-        right: max(16px, env(safe-area-inset-right));
+        border-radius: 13px;
     }
-}
 
-/* Темная тема по умолчанию */
-@media (prefers-color-scheme: dark) {
-    :root {
-        --bg-dark: #000000;
-        --bg-card: #111111;
-        --bg-surface: #1a1a1a;
-        --border-color: #2a2a2a;
+    .week-info {
+        grid-template-columns: 1fr auto;
     }
-}
 
-/* Отключение анимаций для пользователей, которые их предпочитают не видеть */
-@media (prefers-reduced-motion: reduce) {
-    * {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
+    .next-week {
+        display: none;
+    }
+
+    .lesson {
+        grid-template-columns: 92px 1fr;
+    }
+
+    .lesson-time {
+        font-size: 13px;
+        padding: 15px 7px;
+    }
+
+    .lesson-info {
+        padding: 14px;
+    }
+
+    .lesson-subject {
+        font-size: 15px;
+    }
+
+    .lesson-teacher,
+    .lesson-room {
+        font-size: 13px;
+    }
+
+    .time-indicator {
+        flex-direction: column;
+        gap: 5px;
     }
 }
