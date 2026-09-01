@@ -3,14 +3,14 @@
 }
 
 :root {
-    --bg: #f4f6f8;
-    --card: #ffffff;
-    --text: #202124;
-    --muted: #6b7280;
-    --accent: #2563eb;
-    --accent-light: #eaf1ff;
-    --border: #e5e7eb;
-    --shadow: 0 8px 25px rgba(0,0,0,.07);
+    --bg: #0f1115;
+    --card: #171a21;
+    --text: #f3f4f6;
+    --muted: #9ca3af;
+    --accent: #4f8cff;
+    --accent-light: #202b44;
+    --border: #2a2f3a;
+    --shadow: 0 8px 25px rgba(0,0,0,.28);
 }
 
 body {
@@ -182,7 +182,7 @@ body {
 
 .lesson-time {
     background: var(--accent-light);
-    color: #1745a5;
+    color: #8fb4ff;
     font-weight: 700;
     padding: 22px 12px;
     display: flex;
@@ -221,7 +221,7 @@ body {
 }
 
 .empty-text {
-    color: #9ca3af;
+    color: #6b7280;
     font-size: 24px;
     text-align: center;
     padding: 8px;
